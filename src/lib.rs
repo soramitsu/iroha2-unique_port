@@ -1,3 +1,5 @@
+#![crate_name = "unique_port"]
+
 use once_cell::sync::Lazy;
 use std::net::{Ipv4Addr, SocketAddrV4, TcpListener};
 use std::ops::Range;
@@ -5,7 +7,16 @@ use std::sync::Mutex;
 
 static PORT_IDX: Lazy<Mutex<u16>> = Lazy::new(|| Mutex::new(1000));
 
-/// Returns empty port. Every time should be unique
+/// Returns a free unique local port. Every time a call to this function during one run should return a unique address.
+///
+/// # Examples
+/// ```
+/// use unique_port::get_unique_free_port;
+///
+/// let port_1 = get_unique_free_port().unwrap();
+/// let port_2 = get_unique_free_port().unwrap();
+/// assert_ne!(port_1, port_2);
+/// ```
 pub fn get_unique_free_port() -> Result<u16, String> {
     let port_idx = *PORT_IDX
         .lock()
@@ -27,17 +38,4 @@ fn get_free_port(ports: Range<u16>) -> Result<u16, String> {
         .into_iter()
         .find(|port| TcpListener::bind(SocketAddrV4::new(Ipv4Addr::LOCALHOST, *port)).is_ok())
         .ok_or_else(|| "Failed to get empty port".to_owned())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        assert_ne!(
-            get_unique_free_port().unwrap(),
-            get_unique_free_port().unwrap()
-        )
-    }
 }
