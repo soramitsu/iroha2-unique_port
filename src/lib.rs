@@ -24,10 +24,8 @@ pub fn get_unique_free_port() -> Result<u16, String> {
 /// Returns empty port from range. Can be not unique
 fn get_free_port(ports: Range<u16>) -> Result<u16, String> {
     ports
-        .find(|port| {
-            TcpListener::bind(SocketAddrV4::new(Ipv4Addr::LOCALHOST, *port))
-                .is_ok()
-        })
+        .into_iter()
+        .find(|port| TcpListener::bind(SocketAddrV4::new(Ipv4Addr::LOCALHOST, *port)).is_ok())
         .ok_or_else(|| "Failed to get empty port".to_owned())
 }
 
