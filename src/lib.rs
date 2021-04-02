@@ -18,16 +18,12 @@ static PORT_IDX: Lazy<Mutex<u16>> = Lazy::new(|| Mutex::new(1000));
 /// assert_ne!(port_1, port_2);
 /// ```
 pub fn get_unique_free_port() -> Result<u16, String> {
-    let port_idx = *PORT_IDX
+    let mut port_idx = PORT_IDX
         .lock()
         .map_err(|_| "Failed to aquire the lock".to_owned())?;
-
-    let result = get_free_port(port_idx..u16::MAX);
-
+    let result = get_free_port(*port_idx..u16::MAX);
     if let Ok(port) = result {
-        *PORT_IDX
-            .lock()
-            .map_err(|_| "Failed to aquire the lock".to_owned())? = port + 1;
+        *port_idx = port + 1;
     }
     result
 }
