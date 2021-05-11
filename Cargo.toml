@@ -3,6 +3,7 @@ name = "unique_port"
 version = "0.1.0"
 authors = ["Soramitsu Iroha2 team"]
 edition = "2018"
+repository = "https://github.com/soramitsu/iroha2-cargo_lints"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
