@@ -1,6 +1,6 @@
 [package]
 name = "unique_port"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Soramitsu Iroha2 team"]
 edition = "2018"
 repository = "https://github.com/soramitsu/iroha2-unique_port"
